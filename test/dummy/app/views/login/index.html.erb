@@ -1,0 +1,15 @@
+
+<p>Вход в систему</p>
+
+
+<span style="vertical-align: top;">Войти через </span>
+<% OauthService::Provider.providers_data.each do |provider| %>
+    </br>
+	<a 	href="<%= provider.auth_url %>?
+		client_id=<%= provider.client_id %>&
+		response_type=code&
+		redirect_uri=<%= provider.get_redirect_uri(request.original_url) %>
+		<% if provider.scopes %>&scope=<%= h provider.scopes %><% end %>">
+        Авторизация через <%= provider.name %>
+	</a>
+<% end %>

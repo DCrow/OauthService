@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  url_pattern: MyString
+  string: MyString
+  name: MyString
+  string: MyString
+  hhtp_method: MyString
+  string: MyString
+
+two:
+  url_pattern: MyString
+  string: MyString
+  name: MyString
+  string: MyString
+  hhtp_method: MyString
+  string: MyString
