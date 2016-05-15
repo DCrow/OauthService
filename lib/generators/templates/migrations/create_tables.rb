@@ -22,17 +22,19 @@ class CreateTables < ActiveRecord::Migration
     end
 
     create_table :users_urls do |t|
-      t.integer :users_group_id
+      t.integer :user_group_id
       t.integer :url_id
     end
 
-    User.create :name => "guest", :id => 1
-    Url.create :url_pattern => "^/login", :name => "Login page", :http_method => "GET", :id => 1
-    Url.create :url_pattern => "^/oauth/.*", :name => "AuthCallback page", :http_method => "GET", :id => 2
-    UserGroup.create :id => 1, :name => "Guest"
-    UsersGroup.create :id => 1, :user_id => 1, :user_group_id => 1
-    UsersUrl.create :id => 1, :url_id => 1, :users_group_id => 1
-    UsersUrl.create :id => 2, :url_id => 2, :users_group_id => 1
+    guest_user = User.create :name => "guest"
+    guest_url1 = Url.create :url_pattern => "^/login", :name => "Login page", :http_method => "GET"
+    guest_url2 = Url.create :url_pattern => "^/oauth/.*", :name => "AuthCallback page", :http_method => "GET"
+    guest_url3 = Url.create :url_pattern => "^/login/logout", :name => "Logout page", :http_method => "GET"
+    guest_user_group = UserGroup.create :name => "Guest"
+    guest_users_group = UsersGroup.create :user_id => guest_user.id, :user_group_id => guest_user_group.id
+    UsersUrl.create  :url_id => guest_url1.id, :user_group_id => guest_user_group.id
+    UsersUrl.create  :url_id => guest_url2.id, :user_group_id => guest_user_group.id
+    UsersUrl.create  :url_id => guest_url3.id, :user_group_id => guest_user_group.id
   end
 
   def self.down

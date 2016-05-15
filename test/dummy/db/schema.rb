@@ -38,7 +38,7 @@ ActiveRecord::Schema.define(version: 20160514163909) do
   end
 
   create_table "users_urls", force: :cascade do |t|
-    t.integer "users_group_id"
+    t.integer "user_group_id"
     t.integer "url_id"
   end
 
