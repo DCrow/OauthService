@@ -11,35 +11,6 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160514163909) do
-
-  create_table "urls", force: :cascade do |t|
-    t.string "url_pattern"
-    t.string "name"
-    t.string "http_method"
-  end
-
-  create_table "user_groups", force: :cascade do |t|
-    t.string "name"
-  end
-
-  add_index "user_groups", ["name"], name: "index_user_groups_on_name"
-
-  create_table "users", force: :cascade do |t|
-    t.string "name"
-    t.string "api_code"
-  end
-
-  add_index "users", ["name"], name: "index_users_on_name"
-
-  create_table "users_groups", force: :cascade do |t|
-    t.integer "user_group_id"
-    t.integer "user_id"
-  end
-
-  create_table "users_urls", force: :cascade do |t|
-    t.integer "user_group_id"
-    t.integer "url_id"
-  end
+ActiveRecord::Schema.define(version: 0) do
 
 end

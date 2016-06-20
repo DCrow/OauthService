@@ -1,8 +1,5 @@
 module OauthService 
   class Provider
-    AVAILABLE_PROVIDERS = ['YANDEX', 'GOOGLE', 'MAIL_RU']
-    
-
     attr_reader :name, :downcase_name, :auth_url, :client_id, :client_secret,
       :info_url, :scopes, :token_url
     
@@ -19,26 +16,20 @@ module OauthService
     end
     
     def get_redirect_uri(request_url)
-      redirect_uri  = OauthService.redirect_uri
-
-      if redirect_uri[0..3]=="http"
-        redirect_uri + downcase_name
-      else
-        uri = URI.parse(request_url)
-        uri.path = redirect_uri + downcase_name
-        uri.query = nil
-        
-        return uri.to_s
-      end
+      uri = URI.parse(request_url)
+      uri.path = OauthService.redirect_uri + downcase_name
+      uri.query = nil
+      
+      uri.to_s
     end
     
     def get_token_params(options = {})
       {
-        'client_id' => client_id,
-        'client_secret' => client_secret,
-        'redirect_uri' => get_redirect_uri(options[:original_url]),
-        'grant_type' => 'authorization_code',
-        'code' => options[:code]
+        "client_id" => client_id,
+        "client_secret" => client_secret,
+        "redirect_uri" => get_redirect_uri(options[:original_url]),
+        "grant_type" => "authorization_code",
+        "code" => options[:code]
       }
     end
     
@@ -55,22 +46,24 @@ module OauthService
     end
     
     def self.providers_data
-      @@providers_data ||= AVAILABLE_PROVIDERS.collect do |provider|
+      @@providers_data ||= OauthService.available_providers.collect do |provider|
+        keys = OauthService.providers_keys[provider.downcase.to_sym]
         ("OauthService::Provider::#{provider.downcase.camelize}").constantize.new(
           provider,
           provider.downcase,
-          ENV["#{provider}_AUTH_URL"],
-          ENV["#{provider}_CLIENT_ID"],
-          ENV["#{provider}_CLIENT_SECRET"],
-          ENV["#{provider}_INFO_URL"],
-          ENV["#{provider}_SCOPES"],
-          ENV["#{provider}_TOKEN_URL"]
-        ) if ENV["#{provider}_AUTH_URL"] &&
-          ENV["#{provider}_CLIENT_ID"] &&
-          ENV["#{provider}_CLIENT_SECRET"] &&
-          ENV["#{provider}_INFO_URL"] &&
-          ENV["#{provider}_SCOPES"] &&
-          ENV["#{provider}_TOKEN_URL"]
+          keys[:auth_url],
+          keys[:client_id],
+          keys[:client_secret],
+          keys[:info_url],
+          keys[:scopes],
+          keys[:token_url]
+        ) if !keys.nil? &&
+          keys[:auth_url] &&
+          keys[:client_id] &&
+          keys[:client_secret] &&
+          keys[:info_url] &&
+          keys[:scopes] &&
+          keys[:token_url]
       end.compact
     end
     

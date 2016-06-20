@@ -1,6 +1,4 @@
-require "oauth_service"
-
-Rails.application.routes.draw do
-  get "#{OauthService.redirect_uri}/:provider_name",  to: "#{OauthService.login_controller[0..-11].downcase}#oauth_callback"
-  get "#{OauthService.login_controller[0..-11].downcase}/logout",  to: "#{OauthService.login_controller[0..-11].downcase}#logout"
+OauthService::Engine.routes.draw do
+  get "oauth/:provider_name",  to: "oauth#oauth_callback"
+  get "logout",  to: "oauth#logout"
 end

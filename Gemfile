@@ -7,13 +7,9 @@ gemspec
 
 group :test do
   gem 'capybara'
-  gem 'poltergeist'
   gem 'selenium-webdriver'
-  gem 'capybara-screenshot'
-  gem 'database_cleaner'
+  gem 'rack_session_access'
 end
-
-gem 'unicorn'
 
 # Declare any dependencies that are still in development here instead of in
 # your gemspec. These might include edge Rails or gems from your path or

@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
-  get 'login', to: 'login#index'
-  get 'd', to: 'd#index'
-  get 'test', to: 'test#index'
+  mount OauthService::Engine => "/"
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

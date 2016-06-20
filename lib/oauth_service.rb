@@ -4,22 +4,38 @@ require "securerandom"
 require "rails"
 
 module OauthService
-  MODELS = ['url', 'users_url', 'user', 'user_group', 'users_group']
-
-  # The parent controller all OauthService controllers inherits from.
-  # Defaults to "ApplicationController".
-  mattr_accessor :parent_controller
-  @@parent_controller = "ApplicationController"
-
   # The relative route where auth service callback is redirected.
   # Defaults to "/oauth/".
   mattr_accessor :redirect_uri
   @@redirect_uri = "/oauth/"
 
-  # Name of the controller which inherits from OauthService::LoginController
-  # Defaults to "LoginController".
-  mattr_accessor :login_controller
-  @@login_controller = "LoginController"
+  # Format of page after login/logout
+  # Defaults to "json"
+  mattr_accessor :request_format
+  @@request_format = "json"
+
+  # Oauth providers to use for Authorization
+  # Default to ['YANDEX', 'GOOGLE']
+  mattr_accessor :available_providers
+  @@available_providers = ['YANDEX', 'GOOGLE']
+
+
+  # Keys used by Oauth service
+  # Write in this format:
+  # {
+  #   :provider_name_downcased => {
+  #     :auth_url => ...,
+  #     :client_id => ...,
+  #     :client_secret => ...,
+  #     :info_url => ...,
+  #     :scopes => ...,
+  #     :token_url => ...
+  #   }
+  # }
+  # Defaults to {}
+  mattr_accessor :providers_keys
+  @@providers_keys = {}
+          
 
   # Default way to set up OauthService. Run rails generate oauth_service:install to create
   # a fresh initializer with all configuration values.
