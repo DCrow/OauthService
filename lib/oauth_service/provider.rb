@@ -22,6 +22,22 @@ module OauthService
       
       uri.to_s
     end
+
+    def get_auth_uri(request_url)
+      uri = URI.parse(auth_url)
+      uri.query = URI.encode_www_form(get_auth_params(request_url))
+
+      uri.to_s
+    end
+
+    def get_auth_params(request_url)
+      {
+        "client_id" => client_id,
+        "redirect_uri" => get_redirect_uri(request_url),
+        "response_type" => "code",
+        "scope" => scopes
+      }
+    end
     
     def get_token_params(options = {})
       {
@@ -38,17 +54,17 @@ module OauthService
     end
     
     def get_info_headers(options = {})
-      raise "Headers for token request method is undefined"
+      {}
     end
     
     def get_info_params(options = {})
-      raise "Paramaters for information request method is undefined"
+      {}
     end
     
     def self.providers_data
       @@providers_data ||= OauthService.available_providers.collect do |provider|
         keys = OauthService.providers_keys[provider.downcase.to_sym]
-        ("OauthService::Provider::#{provider.downcase.camelize}").constantize.new(
+        ("OauthService::Providers::#{provider.downcase.camelize}").constantize.new(
           provider,
           provider.downcase,
           keys[:auth_url],

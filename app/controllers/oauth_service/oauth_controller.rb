@@ -13,7 +13,7 @@ module OauthService
           },
           :status => 200
       else
-        render format => user_info[:error], :status => user_info[:status]
+        render format => {:success => false, :error => user_info[:error]}, :status => user_info[:status]
       end
     end
 
@@ -47,54 +47,38 @@ module OauthService
       end
 
       def get_access_token(provider, redirect_uri, code)
-        token_uri = URI.parse(provider.token_url)
-        http_token = Net::HTTP.new(token_uri.host, token_uri.port)
-        http_token.use_ssl = true if token_uri.scheme == "https"
-        
-        http_token.start do |http_token_request|
-          res = http_token_request.send_request(
-            "POST",
-            token_uri.request_uri,
-            URI.encode_www_form(provider.get_token_params(original_url: redirect_uri, code: code)),
-            { "Content-Type" => "application/x-www-form-urlencoded" }) 
-          
-          res_body = res.body != "" ? ActiveSupport::JSON.decode(res.body) : {}
+        uri = URI.parse(provider.token_url)
+        uri.query = URI.encode_www_form(provider.get_token_params(original_url: redirect_uri, code: code))
+        headers = { "Content-Type" => "application/x-www-form-urlencoded" }
 
-          if res.code!="200"
-            {
-              :error => {
-                :success => false,
-                :error => res_body["error"]
-              },
-              :status => res.code
-            }
-          else
-            res_body
-          end
-        end
+        send_request("POST", uri, headers)
       end
 
       def get_info(provider, access_token)
-        info_uri = URI.parse(provider.info_url + "?" +
-            URI.encode_www_form(provider.get_info_params(access_token: access_token)))
-        http_info = Net::HTTP.new(info_uri.host, info_uri.port)
-        http_info.use_ssl = true if info_uri.scheme == "https"
+        uri = URI.parse(provider.info_url)
+        uri.query = URI.encode_www_form(provider.get_info_params(access_token: access_token))
+        headers = provider.get_info_headers(access_token: access_token)
+
+        send_request("GET", uri, headers)
+      end
+
+
+      def send_request(method, uri, headers)
+        http = Net::HTTP.new(uri.host, uri.port)
+        http.use_ssl = true if uri.scheme == "https"
           
-        http_info.start do |http_info_request|
+        http.start do |http_info_request|
           res = http_info_request.send_request(
-            "GET",
-            info_uri.request_uri,
-            nil,
-            provider.get_info_headers(access_token: access_token))
+            method,
+            uri.request_uri,
+            uri.query == "" ? nil : uri.query,
+            headers)
 
           res_body = res.body != "" ? ActiveSupport::JSON.decode(res.body) : {}
 
           if res.code!="200"
-            {
-              :error => {
-                  :success => false,
-                  :error => res_body["error"]
-                },
+            { 
+              :error => res_body["error"],
               :status => res.code
             }
           else

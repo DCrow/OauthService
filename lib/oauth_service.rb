@@ -1,4 +1,6 @@
 require "oauth_service/provider"
+require "oauth_service/providers/google"
+require "oauth_service/providers/yandex"
 require "oauth_service/engine"
 require "securerandom"
 require "rails"
