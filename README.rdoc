@@ -1,7 +1,22 @@
 = OauthService
 
-This project rocks and uses MIT-LICENSE.
+Authentication Service
 
-Skeleton project for authentication.
-Uses Google, Yandex, Mail_Ru oauth2 services to authenticate users.
-Response is json.
+Uses Google, Yandex Oauth2 services to authenticate users.
+
+== Before using
+All Oauth2 variables should be set in providers_keys variable.
+All Oauth2 services should be set up to allow following urls: ".../oauth/<provider_name_downcased>?format=<format_name>" 
+*For Json format it is not required.
+Redirect location should be set in redirect_uri varaible.
+
+== How to use
+To authenticate send user to a link created by OauthService::Providers.get_auth_uri method.
+
+After authentication user_name, user_email, api_code are saved in session.
+
+user_name and user_email are returned in Json format.
+Format can be changed by changing request_format variable
+
+To logout send user to ../logout
+It removes user_name, user_email, api_code from session.
