@@ -8,7 +8,7 @@ class OauthServiceIntegrationTest < ActionDispatch::IntegrationTest
     define_method("test_#{provider.downcase_name}".to_sym) do
       visit provider.get_auth_uri("http://localhost:3000/")
 
-      login(provider.downcase_name)
+      send("login_#{provider.downcase_name}".to_sym)
 
       res = parse_json(page)
     
@@ -23,18 +23,17 @@ class OauthServiceIntegrationTest < ActionDispatch::IntegrationTest
     end
   end
 
+  def login_yandex
+    fill_in "login", with: ENV["YANDEX_TEST_USER_LOGIN"]
+    fill_in "passwd", with: ENV["YANDEX_TEST_USER_PASSWORD"]
+    click_button "Войти"
+  end
 
-  def login provider
-    if provider == "yandex"
-      fill_in "login", with: ENV["YANDEX_TEST_USER_LOGIN"]
-      fill_in "passwd", with: ENV["YANDEX_TEST_USER_PASSWORD"]
-      click_button "Войти"
-    elsif provider == "google"
-      fill_in "Email", with: ENV["GOOGLE_TEST_USER_LOGIN"]
-      click_on "next"
-      fill_in "Passwd", with: ENV["GOOGLE_TEST_USER_PASSWORD"]
-      click_on "signIn"
-      click_on "submit_approve_access"
-    end 
+  def login_google
+    fill_in "Email", with: ENV["GOOGLE_TEST_USER_LOGIN"]
+    click_on "next"
+    fill_in "Passwd", with: ENV["GOOGLE_TEST_USER_PASSWORD"]
+    click_on "signIn"
+    click_on "submit_approve_access"
   end
 end
