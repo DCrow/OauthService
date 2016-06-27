@@ -14,7 +14,8 @@ Redirect location should be set in redirect_uri varaible.
 == How to use
 To authenticate send user to a link created by OauthService::Providers.get_auth_uri method.
 
-After authentication user_name, user_email, api_code are saved in session and user_name, user_email will be returned.
+After authentication user_name, user_email, api_code are saved in session.
+user_name, user_email variables are returned.
 
 To logout send user to ../logout
 After which user_name, user_email, api_code are removed from session.
