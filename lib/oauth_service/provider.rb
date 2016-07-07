@@ -49,46 +49,45 @@ module OauthService
       }
     end
     
-    def get_user_info(info)
-      info
+    def get_user_info(redirect_uri, code)
+      token_res = self.get_access_token(redirect_uri, code)
+      token_res[:error].nil? ? self.get_info(token_res) : token_res
     end
-    
-    def get_info_headers(options = {})
+
+    def get_access_token(redirect_uri, code)
+      uri = URI.parse(self.token_url)
+      uri.query = URI.encode_www_form(self.get_token_params(original_url: redirect_uri, code: code))
+
+      send_request(uri, nil, "POST")
+    end
+
+    def get_info(token_res)
       {}
     end
-    
-    def get_info_params(options = {})
-      {}
-    end
-    
-    def self.providers_data
-      @@providers_data ||= OauthService.available_providers.collect do |provider|
-        keys = OauthService.providers_keys[provider.downcase.to_sym]
-        ("OauthService::Providers::#{provider.downcase.camelize}").constantize.new(
-          provider,
-          provider.downcase,
-          keys[:auth_url],
-          keys[:client_id],
-          keys[:client_secret],
-          keys[:info_url],
-          keys[:scopes],
-          keys[:token_url]
-        ) if !keys.nil? &&
-          keys[:auth_url] &&
-          keys[:client_id] &&
-          keys[:client_secret] &&
-          keys[:info_url] &&
-          keys[:scopes] &&
-          keys[:token_url]
-      end.compact
-    end
-    
-    def self.get_provider_by_name(name)
-      res = providers_data.select do |provider|
-        provider.downcase_name == name.downcase
+
+    protected
+      def send_request(uri, headers, method="GET")
+        http = Net::HTTP.new(uri.host, uri.port)
+        http.use_ssl = true if uri.scheme == "https"
+          
+        http.start do |http_info_request|
+          res = http_info_request.send_request(
+            method,
+            uri.request_uri,
+            uri.query == "" ? nil : uri.query,
+            headers)
+
+          res_body = res.body != "" ? ActiveSupport::JSON.decode(res.body) : {}
+
+          if res.code!="200"
+            { 
+              :error => res_body["error"],
+              :status => res.code
+            }
+          else
+            res_body
+          end
+        end
       end
-      
-      res ? res.first : nil
-    end
   end
 end

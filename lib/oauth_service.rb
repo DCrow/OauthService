@@ -1,4 +1,5 @@
 require "oauth_service/provider"
+require "oauth_service/providers"
 require "oauth_service/providers/google"
 require "oauth_service/providers/yandex"
 require "oauth_service/engine"
@@ -17,9 +18,9 @@ module OauthService
   @@request_format = "json"
 
   # Oauth providers to use for Authorization
-  # Default to ['YANDEX', 'GOOGLE']
+  # Default to [OauthService::Providers::Yandex, OauthService::Providers::Google]
   mattr_accessor :available_providers
-  @@available_providers = ['YANDEX', 'GOOGLE']
+  @@available_providers = [OauthService::Providers::Yandex, OauthService::Providers::Google]
 
 
   # Keys used by Oauth service

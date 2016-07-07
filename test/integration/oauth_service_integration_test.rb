@@ -4,7 +4,7 @@ require "helpers/capybara_helper"
 class OauthServiceIntegrationTest < ActionDispatch::IntegrationTest
   include CapybaraHelper
 
-  OauthService::Provider.providers_data.each do |provider|
+  OauthService::Providers.list.each do |provider|
     define_method("test_#{provider.downcase_name}".to_sym) do
       visit provider.get_auth_uri("http://localhost:3000/")
 

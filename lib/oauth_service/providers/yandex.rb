@@ -1,20 +1,20 @@
 module OauthService
   module Providers
     class Yandex < Provider
-      def get_user_info(info)
-        {
-          "email" => info["default_email"],
-          "id" => info["id"],
-          "name" => info["display_name"]
-        }
-      end
-      
-      def get_info_headers(options = {})
-        { "Authorization" => "OAuth #{options[:access_token]}" }
-      end
-      
-      def get_info_params(options = {})
-        {}
+      def get_info(token_result)
+        uri = URI.parse(self.info_url)
+        headers = { "Authorization" => "OAuth #{token_result["access_token"]}" }
+
+        info = self.send_request(uri, headers)
+        if info[:errors].nil? 
+          {
+            "email" => info["default_email"],
+            "id" => info["id"],
+            "name" => info["display_name"]
+          }
+        else
+          info
+        end
       end
     end
   end

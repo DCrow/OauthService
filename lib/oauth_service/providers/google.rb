@@ -1,12 +1,11 @@
 module OauthService
   module Providers
     class Google < Provider
-      def get_info_headers(options = {})
-        { "Authorization" => "Bearer #{options[:access_token]}" }
-      end
+      def get_info(token_result)
+        uri = URI.parse(self.info_url)
+        headers = { "Authorization" => "Bearer #{token_result["access_token"]}" }
 
-      def get_info_params(options = {})
-        {}
+        self.send_request(uri, headers)
       end
     end
   end

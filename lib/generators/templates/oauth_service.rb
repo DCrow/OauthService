@@ -6,7 +6,7 @@ OauthService.setup do |config|
   # config.request_format = "json"
 
   # Oauth providers to use for Authorization
-  # config.available_providers = ['YANDEX', 'GOOGLE']
+  # config.available_providers = [OauthService::Providers::Yandex, OauthService::Providers::Google]
 
   # Keys used by Oauth service
   # Write in this format:

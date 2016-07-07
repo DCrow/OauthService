@@ -6,7 +6,7 @@ OauthService.setup do |config|
   # config.request_format = "json"
 
   # Oauth providers to use for Authorization
-  # config.available_providers = ['YANDEX', 'GOOGLE', 'MAIL_RU']
+  # config.available_providers = [OauthService::Providers::Yandex, OauthService::Providers::Google]
 
 
   # Keys used by Oauth service
@@ -22,6 +22,7 @@ OauthService.setup do |config|
   #   }
   # }
   # 
+
   config.providers_keys = {
     :google => {
       :auth_url => ENV["GOOGLE_AUTH_URL"],
