@@ -44,7 +44,7 @@ Set return format using  `OauthService.request_format`. Default is `"json"`.
 ### Logout process
 1. User is sent  to `<your_server_name>/<your_mount_path>/logout`.
 
-2.`user_name`, `user_email`, `api` are removed from [session](https://github.com/DCrow/OauthService/blob/master/app/controllers/oauth_service/oauth_controller.rb#L24).
+2. `user_name`, `user_email`, `api` are removed from [session](https://github.com/DCrow/OauthService/blob/master/app/controllers/oauth_service/oauth_controller.rb#L24).
 
 
 ##Creating new Oauth providers
