@@ -5,7 +5,7 @@ require "oauth_service/version"
 
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
-  s.name        = "oauth_service"
+  s.name        = "oauth-service"
   s.version     = OauthService::VERSION
   s.authors     = ["DCrow"]
   s.email       = ["d_dcrow@outlook.com"]
