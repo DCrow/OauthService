@@ -6,13 +6,13 @@ module OauthService
 
     def callback
       provider = OauthService::Providers.by_name(params[:provider_name])
-      user_info = provider.get_user_info(request.base_url, params[:code])
+      user_info = provider.get_user_info(request.base_url, params[:code]).symbolize_keys
 
       if user_info[:error].nil?
-        @user = OauthService.user_model.find_by_email(user_info["email"])
+        @user = OauthService.user_model.find_by_email(user_info[:email])
         if @user
-          session[:user_name] = user_info["name"]
-          session[:user_email] = user_info["email"]
+          session[:user_name] = user_info[:name]
+          session[:user_email] = user_info[:email]
           session[:access_token] = generate_api_code
 
           @user.update(
@@ -30,9 +30,11 @@ module OauthService
     end
 
     def logout
-      OauthService.user_model.find_by_email(session[:user_name]).update(
-        :access_token => nil,
-        :access_token_expires => nil
+      OauthService.user_model.find_by_email(session[:user_name]).try(:update,
+        {
+          :access_token => nil,
+          :access_token_expires => nil
+        }
       )
 
       session.clear
