@@ -1,6 +1,8 @@
 OauthService::Engine.routes.draw do
-  get "callback/:provider_name",  to: "base#callback"
-  get "logout",  to: "base#logout"
-  get "login", to: "base#login"
-  get "info", to: "base#info"
+  get 'callback/:provider_name',  to: 'base#callback'
+  get 'logout',  to: 'base#logout'
+  get 'login', to: 'base#login'
+  get 'info', to: 'base#info'
+
+  root 'base#login'
 end

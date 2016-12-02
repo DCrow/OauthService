@@ -38,7 +38,7 @@ module OauthService
       )
 
       session.clear
-      redirect_to params[:redirect_uri] || OauthService.redirect_uri
+      redirect_to params[:redirect_uri] || main_app.root_path
     end
 
     def login
