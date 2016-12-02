@@ -1,9 +1,9 @@
 OauthService.setup do |config|
   # The relative route where auth service callback is redirected.
-  # config.callback_uri = "/oauth/callback/"
+  # config.callback_uri = "/callback/"
 
   # The relative route where user is sent after login
-  # config.redirect_uri = "/oauth/login/"
+  # config.redirect_uri = "/login/"
 
   # Oauth providers to use for Authorization
   # config.available_providers = [OauthService::Providers::Yandex, OauthService::Providers::Google]

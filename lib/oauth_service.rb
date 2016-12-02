@@ -8,16 +8,16 @@ require "rails"
 
 module OauthService
   # The relative route where auth service callback is redirected.
-  # Defaults to "/oauth/callback".
+  # Defaults to "/callback".
   mattr_accessor :callback_uri
-  @@callback_uri = "/oauth/callback/"
+  @@callback_uri = "/callback/"
 
   # The relative route where user is sent after login
   # if :redirect_uri parameter is not set.
   # Should be changed to suit your app
-  # Defaults to "/oauth/login".
+  # Defaults to "/login".
   mattr_accessor :redirect_uri
-  @@redirect_uri = "/oauth/login/"
+  @@redirect_uri = "/login/"
 
   # Oauth providers to use for Authorization
   # Defaults to [OauthService::Providers::Yandex, OauthService::Providers::Google]

@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    oauth-service (0.0.6)
+    oauth_service (0.0.6)
       rails (~> 4.1)
 
 GEM
@@ -133,7 +133,7 @@ PLATFORMS
 DEPENDENCIES
   byebug
   capybara
-  oauth-service!
+  oauth_service!
   rack_session_access
   selenium-webdriver
   sqlite3

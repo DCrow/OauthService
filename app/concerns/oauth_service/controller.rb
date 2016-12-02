@@ -9,7 +9,7 @@ module OauthService
       user_info = provider.get_user_info(request.base_url, params[:code])
 
       if user_info[:error].nil?
-        @user = OauthService.user_model.find_by_email(session[:user_email])
+        @user = OauthService.user_model.find_by_email(user_info["email"])
         if @user
           session[:user_name] = user_info["name"]
           session[:user_email] = user_info["email"]
@@ -41,6 +41,7 @@ module OauthService
 
     def login
       @base_url = request.base_url
+      session.clear
       session[:redirect_uri] = params[:redirect_uri] || OauthService.redirect_uri
 
       render :template => 'oauth/login'
