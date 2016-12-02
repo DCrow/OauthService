@@ -1,8 +1,8 @@
-module OauthService 
+module OauthService
   class Provider
     attr_reader :name, :downcase_name, :auth_url, :client_id, :client_secret,
       :info_url, :scopes, :token_url
-    
+
     def initialize(name, downcase_name, auth_url, client_id, client_secret,
       info_url, scopes, token_url)
       @name = name
@@ -14,12 +14,12 @@ module OauthService
       @scopes = scopes
       @token_url = token_url
     end
-    
+
     def get_redirect_uri(request_url)
       uri = URI.parse(request_url)
-      uri.path = OauthService.redirect_uri + downcase_name
+      uri.path = OauthService.callback_uri + downcase_name
       uri.query = nil
-      
+
       uri.to_s
     end
 
@@ -38,7 +38,7 @@ module OauthService
         "scope" => scopes
       }
     end
-    
+
     def get_token_params(options = {})
       {
         "client_id" => client_id,
@@ -48,7 +48,7 @@ module OauthService
         "code" => options[:code]
       }
     end
-    
+
     def get_user_info(redirect_uri, code)
       token_res = self.get_access_token(redirect_uri, code)
       token_res[:error].nil? ? self.get_info(token_res) : token_res
@@ -69,7 +69,7 @@ module OauthService
       def send_request(uri, headers, method="GET")
         http = Net::HTTP.new(uri.host, uri.port)
         http.use_ssl = true if uri.scheme == "https"
-          
+
         http.start do |http_info_request|
           res = http_info_request.send_request(
             method,
@@ -80,7 +80,7 @@ module OauthService
           res_body = res.body != "" ? ActiveSupport::JSON.decode(res.body) : {}
 
           if res.code!="200"
-            { 
+            {
               :error => res_body["error"],
               :status => res.code
             }

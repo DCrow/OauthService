@@ -21,7 +21,8 @@ OauthService.setup do |config|
   #     :token_url => ...
   #   }
   # }
-  # 
+  #
+  config.token_expire = 1.month
 
   config.providers_keys = {
     :google => {

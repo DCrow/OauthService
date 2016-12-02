@@ -1,9 +1,9 @@
 OauthService.setup do |config|
   # The relative route where auth service callback is redirected.
-  # config.redirect_uri = "/oauth/"
+  # config.callback_uri = "/oauth/callback/"
 
-  # Format of page after login/logout
-  # config.request_format = "json"
+  # The relative route where user is sent after login
+  # config.redirect_uri = "/oauth/login/"
 
   # Oauth providers to use for Authorization
   # config.available_providers = [OauthService::Providers::Yandex, OauthService::Providers::Google]
@@ -20,6 +20,11 @@ OauthService.setup do |config|
   #     :token_url => ...
   #   }
   # }
-  # 
+  #
   # config.providers_keys = {}
+  # Defaults to "User"
+  # config.user_model_name = "User"
+
+  # User info can be accessed until login_date + token_expire
+  # config.token_expire = 1.day
 end

@@ -8,20 +8,21 @@ require "rails"
 
 module OauthService
   # The relative route where auth service callback is redirected.
-  # Defaults to "/oauth/".
-  mattr_accessor :redirect_uri
-  @@redirect_uri = "/oauth/"
+  # Defaults to "/oauth/callback".
+  mattr_accessor :callback_uri
+  @@callback_uri = "/oauth/callback/"
 
-  # Format of page after login/logout
-  # Defaults to "json"
-  mattr_accessor :request_format
-  @@request_format = "json"
+  # The relative route where user is sent after login
+  # if :redirect_uri parameter is not set.
+  # Should be changed to suit your app
+  # Defaults to "/oauth/login".
+  mattr_accessor :redirect_uri
+  @@redirect_uri = "/oauth/login/"
 
   # Oauth providers to use for Authorization
-  # Default to [OauthService::Providers::Yandex, OauthService::Providers::Google]
+  # Defaults to [OauthService::Providers::Yandex, OauthService::Providers::Google]
   mattr_accessor :available_providers
   @@available_providers = [OauthService::Providers::Yandex, OauthService::Providers::Google]
-
 
   # Keys used by Oauth service
   # Write in this format:
@@ -38,11 +39,22 @@ module OauthService
   # Defaults to {}
   mattr_accessor :providers_keys
   @@providers_keys = {}
-          
+
+  # Defaults to "User"
+  mattr_accessor :user_model_name
+  @@user_model_name = "User"
+
+  # User info can be accessed until login_date + token_expire
+  mattr_accessor :token_expire
+  @@token_expire = 1.day
 
   # Default way to set up OauthService. Run rails generate oauth_service:install to create
   # a fresh initializer with all configuration values.
   def self.setup
     yield self
+  end
+
+  def self.user_model
+    self.user_model_name.constantize
   end
 end

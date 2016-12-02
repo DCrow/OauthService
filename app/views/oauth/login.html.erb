@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    </head>
+    <body>
+        Login with: <% OauthService::Providers.list.each do |provider| %>
+        <li>
+            <a href=<%=provider.get_auth_uri(@base_url)%>><%= provider.name %></a>
+        </li>
+        <%end%>
+    </body>
+</html>>
