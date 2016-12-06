@@ -48,6 +48,11 @@ module OauthService
   mattr_accessor :token_expire
   @@token_expire = 1.day
 
+  # Logo for login page
+  # Default to OauthService logo
+  mattr_accessor :login_logo
+  @@login_logo = "logo.png"
+
   # Default way to set up OauthService. Run rails generate oauth_service:install to create
   # a fresh initializer with all configuration values.
   def self.setup

@@ -26,7 +26,7 @@ module OauthService
       end
 
       after_callback user_info
-      redirect user_info
+      render_callback user_info
     end
 
     def logout
@@ -100,7 +100,7 @@ module OauthService
         message
       end
 
-      def redirect user_info
+      def render_callback user_info
         uri_params = user_info[:error].nil? ? {access_token: @user.access_token} : {error: user_info[:error]}
         redirect_uri = URI.parse(session[:redirect_uri])
         redirect_uri.query = URI.encode_www_form(uri_params)
