@@ -22,8 +22,12 @@ OauthService.setup do |config|
   # }
   #
   # config.providers_keys = {}
+
   # Defaults to "User"
   # config.user_model_name = "User"
+
+  # Default OauthService logo
+  # config.login_logo = "logo.png"
 
   # User info can be accessed until login_date + token_expire
   # config.token_expire = 1.day
