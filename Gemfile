@@ -7,8 +7,10 @@ gemspec
 
 group :test do
   gem 'capybara'
+  gem 'rspec-rails'
+  gem 'factory_girl_rails'
   gem 'selenium-webdriver'
-  gem 'rack_session_access'
+  gem 'database_cleaner'
 end
 
 # Declare any dependencies that are still in development here instead of in
@@ -18,4 +20,4 @@ end
 
 # To use a debugger
 gem 'byebug', group: [:development, :test]
-
+gem 'dotenv-rails', group: [:development, :test]

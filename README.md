@@ -29,7 +29,7 @@ Set return format using  `OauthService.request_format`. Default is `"json"`
 ##How to use
 
 ### Authentication process
-1. User clicks a link created by `<your_provider>.get_auth_uri`
+1. User clicks a link created by `<your_provider>.auth_uri`
 
 2. User is sent to oauth service authentication page
 

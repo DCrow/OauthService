@@ -6,9 +6,9 @@ module OauthService
 
     def callback
       provider = OauthService::Providers.by_name(params[:provider_name])
-      user_info = provider.get_user_info(request.base_url, params[:code]).symbolize_keys
+      user_info = provider ? provider.user_info(request.base_url, params[:code]).symbolize_keys : nil
 
-      if user_info[:error].nil?
+      if user_info && user_info[:error].nil?
         @user = OauthService.user_model.find_by_email(user_info[:email])
         if @user
           session[:user_name] = user_info[:name]
@@ -20,7 +20,6 @@ module OauthService
             :access_token_expires => Date.today + OauthService.token_expire
           )
         else
-          user_info = nil
           user_info = {:error => 'invalid_request'}
         end
       end
@@ -30,7 +29,7 @@ module OauthService
     end
 
     def logout
-      OauthService.user_model.find_by_email(session[:user_name]).try(:update,
+      OauthService.user_model.find_by_email(session[:user_email]).try(:update,
         {
           :access_token => nil,
           :access_token_expires => nil
@@ -38,7 +37,7 @@ module OauthService
       )
 
       session.clear
-      redirect_to params[:redirect_uri] || main_app.root_path
+      redirect_to params[:redirect_uri] || root_url
     end
 
     def login

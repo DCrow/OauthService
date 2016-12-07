@@ -4,5 +4,5 @@ OauthService::Engine.routes.draw do
   get 'login', to: 'base#login'
   get 'info', to: 'base#info'
 
-  root 'base#login'
+  root to: 'base#login'
 end

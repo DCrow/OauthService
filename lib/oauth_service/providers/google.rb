@@ -1,7 +1,7 @@
 module OauthService
   module Providers
     class Google < Provider
-      def get_info(token_result)
+      def info(token_result)
         uri = URI.parse(self.info_url)
         headers = { "Authorization" => "Bearer #{token_result["access_token"]}" }
 

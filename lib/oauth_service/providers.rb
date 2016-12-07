@@ -1,4 +1,4 @@
-module OauthService 
+module OauthService
   module Providers
 
     def self.list
@@ -7,7 +7,6 @@ module OauthService
         keys = OauthService.providers_keys[provider_name.to_sym]
         provider.new(
           provider_name,
-          provider_name.downcase,
           keys[:auth_url],
           keys[:client_id],
           keys[:client_secret],
@@ -23,14 +22,9 @@ module OauthService
           keys[:token_url]
       end.compact
     end
-    
-    def self.by_name(name)
-      res = list.select do |provider|
-        provider.downcase_name == name.downcase
-      end
-      
-      res ? res.first : nil
-    end
 
+    def self.by_name(name)
+      list.find { |provider| provider.name.downcase == name.downcase }
+    end
   end
 end
