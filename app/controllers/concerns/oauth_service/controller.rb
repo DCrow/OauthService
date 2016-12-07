@@ -8,6 +8,8 @@ module OauthService
       provider = OauthService::Providers.by_name(params[:provider_name])
       user_info = provider ? provider.user_info(request.base_url, params[:code]).symbolize_keys : nil
 
+      before_callback user_info
+
       if user_info && user_info[:error].nil?
         @user = OauthService.user_model.find_by_email(user_info[:email])
         if @user
@@ -100,12 +102,21 @@ module OauthService
       end
 
       def render_callback user_info
-        uri_params = user_info[:error].nil? ? {access_token: @user.access_token} : {error: user_info[:error]}
         redirect_uri = URI.parse(session[:redirect_uri])
+
+        unless user_info[:error]
+          session[:redirect_uri] = nil
+          uri_params = {access_token: @user.access_token}
+        else
+          uri_params = {error: user_info[:error]}
+          session.clear
+        end
         redirect_uri.query = URI.encode_www_form(uri_params)
-        session[:redirect_uri] = nil
 
         redirect_to redirect_uri.to_s
+      end
+
+      def before_callback user_info
       end
 
       def after_callback user_info
